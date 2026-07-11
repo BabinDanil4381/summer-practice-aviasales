@@ -3,13 +3,9 @@ package com.example.elements;
 import com.codeborne.selenide.Selenide;
 import com.example.core.BaseElement;
 
-import static com.codeborne.selenide.Selenide.$x;
 
-import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.Duration;
-import static com.codeborne.selenide.Condition.visible;
 
 /**
  * Элемент страницы «Поле ввода» (Input).
@@ -66,7 +62,7 @@ public class Input extends BaseElement {
         }
     }
 
-    /**
+    /** КОСТЫЛЬ ИЗ ЗА РЕАКТА
      * Установить значение через нативный сеттер + input-событие.
      * Работает с React/Vue-контролируемыми полями.
      */

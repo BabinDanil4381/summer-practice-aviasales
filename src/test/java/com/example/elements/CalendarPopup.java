@@ -6,24 +6,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.example.core.BasePage;
+import com.example.core.BaseElement;
 
 /**
  * Всплывающий календарь Aviasales.
  * Появляется после клика на DataPicker.
  */
-public class CalendarPopup extends BasePage {
+public class CalendarPopup extends BaseElement {
 
     private static final Logger log = LoggerFactory.getLogger(CalendarPopup.class);
 
     // XPath-константы для элементов внутри календаря
     private static final String TODAY_BUTTON = "//button[contains(@aria-label, 'Today')]";
     private static final String TOMORROW_BUTTON = 
-        "//button[contains(@aria-label, 'Today')]/following::button[contains(@class, 'day')][1]";   
+        "//button[contains(@aria-label, 'Today')]/following::button[contains(@class, 'day')][1]"; 
+    private static final String TESTID_XPATH = "//*[@data-test-id='%s']";  
 
     public CalendarPopup() {
-        super(CalendarPopup.class);   // ← конструктор BasePage без XPath
+        super(TESTID_XPATH, "dropdown");
     }
 
     /**
@@ -32,7 +32,7 @@ public class CalendarPopup extends BasePage {
     public CalendarPopup waitVisible() {
         log.info("Ожидание появления календаря");
         Selenide.sleep(500);
-        $x(TODAY_BUTTON).shouldBe(com.codeborne.selenide.Condition.visible);
+        baseElement.shouldBe(com.codeborne.selenide.Condition.visible);
         return this;
     }
 

@@ -2,9 +2,7 @@ package com.example.elements;
 
 import com.codeborne.selenide.Selenide;
 import com.example.core.BaseElement;
-import com.example.elements.CalendarPopup;
 
-import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +14,7 @@ public class DataPicker extends BaseElement {
 
     private static final Logger log = LoggerFactory.getLogger(DataPicker.class);
 
-    private static final String ID_XPATH = "//input[@id='%s']";
-    private static final String NAME_XPATH = "//input[@name='%s']";
-    private static final String TEXTAREA_NAME_XPATH = "//textarea[@name='%s']";
+
     private static final String TESTID_XPATH = "//*[@data-test-id='%s']";
 
     private DataPicker(String xpath, String param) {
@@ -35,8 +31,6 @@ public class DataPicker extends BaseElement {
 
     /**
      * Клик на поле ввода.
-     * Воспроизводит нажатие пользователя на элемент.
-     * При перехвате клика (например, выпадающим списком) используется JavaScript.
      */
     public CalendarPopup click() {
         log.info("Клик на поле ввода");

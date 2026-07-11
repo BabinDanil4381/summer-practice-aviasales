@@ -8,12 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Тест вставки в поле откуда на Aviasales.
- * <p>
  * Тест-кейс:
  * 1. Открыть страницу Aviasales
  * 2. Нажать на поле откуда
  * 3. Ввести текст
- * 4. Проверить, что введённый текст соответствует ожидаемому
+ * 4. нажатие на поле когда и выбор сегодняшней даты
+ * 5. нажатие на поле обратно и выбор завтрашней даты
+ * 6. Проверить, что введённый текст соответствует ожидаемому
  */
 public class AviasalesSearchTest extends BaseTest {
 
@@ -40,14 +41,18 @@ public class AviasalesSearchTest extends BaseTest {
         // Шаг 6: Ввод в поле 'куда'
         String expectedDestination = "Санкт-Петербург";
         searchPage = searchPage.enterDestinationQuery(expectedDestination);
+        
+        // Шаг 7: Нажатие на поле 'когда' и выбор сегодняшней даты
+        searchPage = searchPage.clickDatePickerStartDate();
+        searchPage = searchPage.selectTodayDate();
 
-        searchPage = searchPage.clickDatePickerStartDate(); // Нажатие на поле 'когда'
-        searchPage = searchPage.selectTodayDate(); // Выбор сегодняшней даты в календаре
-        searchPage = searchPage.clickDatePickerEndDate(); // Нажатие на поле 'когда'
-        searchPage = searchPage.selectTomorrowDate(); // Выбор завтрашней даты в календаре
+        // Шаг 8: Нажатие на поле 'обратно' и выбор завтрашней даты
+        searchPage = searchPage.clickDatePickerEndDate();
+        searchPage = searchPage.selectTomorrowDate();
         
 
-        // Шаг 6: Проверить, что текст в полях совпадает с введённым
+        // Шаг 9: Проверить, что текст в полях совпадает с введённым
+        // проверка полей даты будет позже
         String actualOrigin = searchPage.getOriginQuery();
         String actualDestination = searchPage.getdestinationQuery();
         //log.info("Ожидаемый текст: '{}'", expectedQuery);
