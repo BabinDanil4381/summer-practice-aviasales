@@ -25,21 +25,37 @@ public class AviasalesSearchTest extends BaseTest {
         AviasalesSearchPage searchPage = AviasalesSearchPage.openPage();
 
         // Шаг 2: Дождаться видимости поля откуда
-        searchPage = searchPage.waitSearchFieldVisible();
+        searchPage = searchPage.waitFieldsVisible();
 
-        // Шаг 3: Нажать на поле ввода запроса
-        searchPage = searchPage.clickSearchField();
+        // Шаг 3: Нажатие на поле 'откуда'
+        searchPage = searchPage.clickOriginField();
 
-        // Шаг 4: Ввести поисковый запрос
-        String expectedQuery = "Москва";
-        searchPage = searchPage.enterSearchQuery(expectedQuery);
+        // Шаг 4: Ввод в поле 'откуда'
+        String expectedOrigin = "Москва";
+        searchPage = searchPage.enterOriginQuery(expectedOrigin);
 
-        // Шаг 5: Проверить, что текст в поле совпадает с введённым
-        String actualQuery = searchPage.getSearchQuery();
-        log.info("Ожидаемый текст: '{}'", expectedQuery);
-        log.info("Фактический текст: '{}'", actualQuery);
-        assertEquals(expectedQuery, actualQuery,
-                "Текст в поле поиска должен совпадать с введённым");
+        // Шаг 5: Нажатие на поле 'куда'
+        searchPage = searchPage.clickDestinationField();
+
+        // Шаг 6: Ввод в поле 'куда'
+        String expectedDestination = "Санкт-Петербург";
+        searchPage = searchPage.enterDestinationQuery(expectedDestination);
+
+        searchPage = searchPage.clickDatePickerStartDate(); // Нажатие на поле 'когда'
+        searchPage = searchPage.selectTodayDate(); // Выбор сегодняшней даты в календаре
+        searchPage = searchPage.clickDatePickerEndDate(); // Нажатие на поле 'когда'
+        searchPage = searchPage.selectTomorrowDate(); // Выбор завтрашней даты в календаре
+        
+
+        // Шаг 6: Проверить, что текст в полях совпадает с введённым
+        String actualOrigin = searchPage.getOriginQuery();
+        String actualDestination = searchPage.getdestinationQuery();
+        //log.info("Ожидаемый текст: '{}'", expectedQuery);
+        //log.info("Фактический текст: '{}'", actualQuery);
+        assertEquals(expectedOrigin, actualOrigin,
+                "Текст в поле 'откуда' должен совпадать с введённым");
+        assertEquals(expectedDestination, actualDestination,
+                "Текст в поле 'куда' должен совпадать с введённым");
 
         log.info("--- Тест успешно пройден ---");
     }

@@ -2,8 +2,14 @@ package com.example.elements;
 
 import com.codeborne.selenide.Selenide;
 import com.example.core.BaseElement;
+
+import static com.codeborne.selenide.Selenide.$x;
+
+import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.Duration;
+import static com.codeborne.selenide.Condition.visible;
 
 /**
  * Элемент страницы «Поле ввода» (Input).
@@ -61,11 +67,33 @@ public class Input extends BaseElement {
     }
 
     /**
+     * Установить значение через нативный сеттер + input-событие.
+     * Работает с React/Vue-контролируемыми полями.
+     */
+    protected void setValueReact(String value) {
+        Selenide.executeJavaScript(
+            "var el = arguments[0];" +
+            "var setter = Object.getOwnPropertyDescriptor(" +
+            "    window.HTMLInputElement.prototype, 'value').set;" +
+            "setter.call(el, arguments[1]);" +
+            "el.dispatchEvent(new Event('input', { bubbles: true }));",
+            baseElement, value
+        );
+    }
+
+    /**
      * Ввести текст в поле.
      */
     public void fill(String value) {
         log.info("Ввод текста: '{}'", value);
-        baseElement.setValue(value);
+        Selenide.sleep(200);
+        setValueReact(value);
+        Selenide.sleep(300);
+        // Проверить, появился ли список подсказок
+        if (!Selenide.$$x("//li[@role='option']").isEmpty()) {
+            Selenide.$x("//li[@role='option'][1]").click();
+        }
+
     }
 
     /**

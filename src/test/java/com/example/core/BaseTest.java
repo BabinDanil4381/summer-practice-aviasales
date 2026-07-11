@@ -2,8 +2,13 @@ package com.example.core;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +27,16 @@ public class BaseTest {
         Configuration.browser = "chrome";
         Configuration.savePageSource = false;
         Configuration.timeout = 10000;
+        Configuration.pageLoadTimeout = 180000;
         Configuration.holdBrowserOpen = true; // что бы браузер не закрывался после тестов
+
+        // Блокировка геолокации и других разрешений
+        ChromeOptions options = new ChromeOptions();
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("profile.default_content_setting_values.geolocation", 2);  // 2 = блокировать
+        options.setExperimentalOption("prefs", prefs);
+        Configuration.browserCapabilities = options;
+        
         log.info("Браузер: Chrome, таймаут: 10с");
     }
 
