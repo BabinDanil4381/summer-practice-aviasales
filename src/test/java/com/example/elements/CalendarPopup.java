@@ -18,12 +18,13 @@ public class CalendarPopup extends BaseElement {
 
     // XPath-константы для элементов внутри календаря
     private static final String TODAY_BUTTON = "//button[contains(@aria-label, 'Today')]";
-    private static final String TOMORROW_BUTTON = 
-        "//button[contains(@aria-label, 'Today')]/following::button[contains(@class, 'day')][1]"; 
-    private static final String TESTID_XPATH = "//*[@data-test-id='%s']";  
+    private static final String TOMORROW_BUTTON =
+            "//button[contains(@aria-label, 'Today')]/following::button[contains(@class, 'day')][1]";
+    private static final String TESTID_XPATH =
+            "//*[@data-test-id='dropdown' or @data-test-id='exact-calendar']";
 
     public CalendarPopup() {
-        super(TESTID_XPATH, "dropdown");
+        super(TESTID_XPATH, "");
     }
 
     /**

@@ -85,11 +85,15 @@ public class Input extends BaseElement {
         Selenide.sleep(200);
         setValueReact(value);
         Selenide.sleep(300);
-        // Проверить, появился ли список подсказок
-        if (!Selenide.$$x("//li[@role='option']").isEmpty()) {
-            Selenide.$x("//li[@role='option'][1]").click();
-        }
 
+        var options = Selenide.$$x("//*[@role='option']");
+        if (!options.isEmpty()) {
+            var match = options.stream()
+                    .filter(o -> o.$x(".//*[@data-test-id='text']").getText().equalsIgnoreCase(value))
+                    .findFirst()
+                    .orElse(options.first());
+            match.click();
+        }
     }
 
     /**

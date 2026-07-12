@@ -29,7 +29,7 @@ public class BaseTest {
         Configuration.timeout = 10000;
         Configuration.pageLoadTimeout = 180000;
         Configuration.holdBrowserOpen = true; // что бы браузер не закрывался после тестов
-
+        Configuration.browserSize = "1920x1080";
         // Блокировка геолокации и других разрешений
         ChromeOptions options = new ChromeOptions();
         Map<String, Object> prefs = new HashMap<>();
