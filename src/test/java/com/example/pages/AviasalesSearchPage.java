@@ -16,7 +16,7 @@ import com.example.elements.Button; // test 4
 
 import com.example.elements.CurrencySelector; // test 6
 
-
+import com.example.elements.TripClass; // test 5
 
 /**
  * Страница поиска Aviasales.
@@ -37,6 +37,9 @@ public class AviasalesSearchPage extends BasePage {
     private final Button searchButton = Button.byTestId("form-submit"); // test 4
 
     private final CurrencySelector currencySelector = new CurrencySelector(); // test 6
+
+    private final TripClass tripClass = new TripClass(); // test 5
+
 
     public AviasalesSearchPage() {
         super(AviasalesSearchPage.class);
@@ -231,6 +234,44 @@ public class AviasalesSearchPage extends BasePage {
      */
     public String getCurrencySymbol() {
         return currencySelector.getCurrencySymbol();
+    }
+
+
+
+    // test 5:
+    
+    /**
+     * Открыть окно выбора класса.
+     */
+    public AviasalesSearchPage openTripClass() {
+        log.info("Открытие окна выбора класса");
+        tripClass.open();
+        return this;
+    }
+
+    /**
+     * Выбрать бизнес-класс.
+     */
+    public AviasalesSearchPage selectBusinessClass() {
+        log.info("Выбор бизнес-класса");
+        tripClass.selectBusiness();
+        return this;
+    }
+
+    /**
+     * Применить выбор класса.
+     */
+    public AviasalesSearchPage applyTripClass() {
+        log.info("Применение выбора класса");
+        tripClass.apply();
+        return this;
+    }
+
+    /**
+     * Получить текст с выбранным классом.
+     */
+    public String getTripClassText() {
+        return tripClass.getSelectedClassText();
     }
 
 

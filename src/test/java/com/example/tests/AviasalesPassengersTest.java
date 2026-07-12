@@ -34,12 +34,8 @@ public class AviasalesPassengersTest extends BaseTest {
 
         // 5) Выбрать дату "завтра"
         searchPage = searchPage.clickDatePickerStartDate();
-        searchPage.waitFieldsVisible(); // ЖДЕМ ЗАГРУЗКИ КАЛЕНДАРЯ
+        searchPage.waitFieldsVisible(); 
         searchPage = searchPage.selectTomorrowDate();
-
-
-        // 6) Нажать кнопку "Найти билеты" (переходит куда не надо. никак не проверить)
-        // searchPage = searchPage.clickSearchButton();
 
 
         // 6) Проверить, что в параметрах отображается "2 пассажира"
