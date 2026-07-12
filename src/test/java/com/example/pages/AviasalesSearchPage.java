@@ -11,6 +11,10 @@ import com.example.elements.Input;
 import com.example.elements.DataPicker;
 import com.example.elements.CalendarPopup;
 
+import com.example.elements.Passengers; // test 4
+import com.example.elements.Button; // test 4
+
+
 /**
  * Страница поиска Aviasales.
  * Содержит элементы, присутствующие на странице, и методы взаимодействия с ними.
@@ -25,6 +29,8 @@ public class AviasalesSearchPage extends BasePage {
     private final DataPicker datePickerStartDate = DataPicker.byTestId("start-date-field");
     private final DataPicker datePickerEndDate = DataPicker.byTestId("end-date-field");
     private CalendarPopup calendarPopup;
+    private final Passengers passengers = new Passengers(); // test 4
+    private final Button searchButton = Button.byTestId("form-submit"); // test 4
 
     public AviasalesSearchPage() {
         super(AviasalesSearchPage.class);
@@ -152,4 +158,51 @@ public class AviasalesSearchPage extends BasePage {
     public String getdestinationQuery() {
         return destinationInput.getValue();
     }
+
+    // for test 4
+
+    /**
+     * Открыть окно выбора пассажиров.
+     */
+    public AviasalesSearchPage openPassengers() {
+        log.info("Открытие окна выбора пассажиров");
+        passengers.open();
+        return this;
+    }
+
+    /**
+     * Установить количество взрослых пассажиров.
+     */
+    public AviasalesSearchPage setAdults(int count) {
+        log.info("Установка количества взрослых: {}", count);
+        passengers.setAdults(count);
+        return this;
+    }
+
+    /**
+     * Применить выбор пассажиров.
+     */
+    public AviasalesSearchPage applyPassengers() {
+        log.info("Применение выбора пассажиров");
+        passengers.apply();
+        return this;
+    }
+
+    /**
+     * Получить текст с количеством пассажиров.
+     */
+    public String getPassengersText() {
+        return passengers.getPassengersText();
+    }
+
+    /**
+     * Нажать на кнопку "Найти билеты".
+     */
+    public AviasalesSearchPage clickSearchButton() {
+        log.info("Нажатие на кнопку 'Найти билеты'");
+        searchButton.click();
+        Selenide.sleep(2000);
+        return this;
+    }  
+
 }
