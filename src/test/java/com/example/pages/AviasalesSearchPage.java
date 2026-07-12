@@ -14,6 +14,9 @@ import com.example.elements.CalendarPopup;
 import com.example.elements.Passengers; // test 4
 import com.example.elements.Button; // test 4
 
+import com.example.elements.CurrencySelector; // test 6
+
+
 
 /**
  * Страница поиска Aviasales.
@@ -29,8 +32,11 @@ public class AviasalesSearchPage extends BasePage {
     private final DataPicker datePickerStartDate = DataPicker.byTestId("start-date-field");
     private final DataPicker datePickerEndDate = DataPicker.byTestId("end-date-field");
     private CalendarPopup calendarPopup;
+
     private final Passengers passengers = new Passengers(); // test 4
     private final Button searchButton = Button.byTestId("form-submit"); // test 4
+
+    private final CurrencySelector currencySelector = new CurrencySelector(); // test 6
 
     public AviasalesSearchPage() {
         super(AviasalesSearchPage.class);
@@ -159,6 +165,7 @@ public class AviasalesSearchPage extends BasePage {
         return destinationInput.getValue();
     }
 
+
     // for test 4
 
     /**
@@ -204,5 +211,27 @@ public class AviasalesSearchPage extends BasePage {
         Selenide.sleep(2000);
         return this;
     }  
+
+
+    // for test 6:
+
+    /**
+     * Сменить валюту на USD.
+     */
+    public AviasalesSearchPage changeCurrencyToUSD() {
+        log.info("Смена валюты на USD");
+        currencySelector.openMenu();
+        currencySelector.clickCurrencyTab();
+        currencySelector.selectUSD();
+        return this;
+    }
+
+    /**
+     * Получить символ текущей валюты.
+     */
+    public String getCurrencySymbol() {
+        return currencySelector.getCurrencySymbol();
+    }
+
 
 }
