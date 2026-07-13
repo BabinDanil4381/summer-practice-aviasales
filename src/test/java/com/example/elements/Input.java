@@ -1,7 +1,11 @@
 package com.example.elements;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.example.core.BaseElement;
+
+import java.time.Duration;
 
 
 import org.slf4j.Logger;
@@ -54,12 +58,8 @@ public class Input extends BaseElement {
      */
     public void click() {
         log.info("Клик на поле ввода");
-        try {
-            baseElement.click();
-        } catch (Exception e) {
-            log.warn("Обычный клик перехвачен, использую JavaScript клик");
-            Selenide.executeJavaScript("arguments[0].click();", baseElement);
-        }
+        SelenideElement input = visibleElement(Duration.ofSeconds(WAIT_SECONDS));
+        clickElement(input);
     }
 
     /** КОСТЫЛЬ ИЗ ЗА РЕАКТА
@@ -73,7 +73,7 @@ public class Input extends BaseElement {
             "    window.HTMLInputElement.prototype, 'value').set;" +
             "setter.call(el, arguments[1]);" +
             "el.dispatchEvent(new Event('input', { bubbles: true }));",
-            baseElement, value
+            element(), value
         );
     }
 
@@ -82,21 +82,17 @@ public class Input extends BaseElement {
      */
     public void fill(String value) {
         log.info("Ввод текста: '{}'", value);
-        Selenide.sleep(200);
+        SelenideElement input = visibleElement(Duration.ofSeconds(WAIT_SECONDS));
+        input.shouldBe(Condition.visible, Duration.ofSeconds(WAIT_SECONDS));
         setValueReact(value);
-        Selenide.sleep(300);
-        // Проверить, появился ли список подсказок
-        if (!Selenide.$$x("//li[@role='option']").isEmpty()) {
-            Selenide.$x("//li[@role='option'][1]").click();
-        }
-
+        input.shouldHave(Condition.value(value), Duration.ofSeconds(WAIT_SECONDS));
     }
 
     /**
      * Получить текущее значение поля.
      */
     public String getValue() {
-        String value = baseElement.getValue();
+        String value = element().getValue();
         log.info("Текущее значение поля: '{}'", value);
         return value;
     }

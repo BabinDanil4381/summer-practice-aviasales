@@ -1,9 +1,13 @@
 package com.example.elements;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.example.core.BaseElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
 
 /**
  * Элемент страницы «Кнопка».
@@ -41,11 +45,7 @@ public class Button extends BaseElement {
      */
     public void click() {
         log.info("Нажатие на кнопку");
-        try {
-            baseElement.click();
-        } catch (Exception e) {
-            log.warn("Обычный клик перехвачен, использую JavaScript клик");
-            Selenide.executeJavaScript("arguments[0].click();", baseElement);
-        }
+        SelenideElement button = visibleElement(Duration.ofSeconds(WAIT_SECONDS));
+        clickElement(button);
     }
 }

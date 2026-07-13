@@ -1,10 +1,14 @@
 package com.example.elements;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.example.core.BaseElement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
 
 /**
  * Элемент страницы «Поле ввода» (Input).
@@ -34,13 +38,8 @@ public class DataPicker extends BaseElement {
      */
     public CalendarPopup click() {
         log.info("Клик на поле ввода");
-        Selenide.sleep(200); // Можно убрать
-        try {
-            baseElement.click();
-        } catch (Exception e) {
-            log.warn("Обычный клик перехвачен, использую JavaScript клик");
-            Selenide.executeJavaScript("arguments[0].click();", baseElement);
-        }
+        SelenideElement picker = visibleElement(Duration.ofSeconds(WAIT_SECONDS));
+        clickElement(picker);
         return new CalendarPopup();
     }
 

@@ -5,8 +5,11 @@ import static com.codeborne.selenide.Selenide.$x;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.example.core.BaseElement;
+
+import java.time.Duration;
 
 /**
  * Всплывающий календарь Aviasales.
@@ -31,8 +34,7 @@ public class CalendarPopup extends BaseElement {
      */
     public CalendarPopup waitVisible() {
         log.info("Ожидание появления календаря");
-        Selenide.sleep(500);
-        baseElement.shouldBe(com.codeborne.selenide.Condition.visible);
+        visibleElement(Duration.ofSeconds(15));
         return this;
     }
 
@@ -41,8 +43,8 @@ public class CalendarPopup extends BaseElement {
      */
     public CalendarPopup selectTomorrow() {
         log.info("Выбор завтрашней даты");
-        Selenide.sleep(500);
-        $x(TOMORROW_BUTTON).click();
+        SelenideElement tomorrowButton = $x(TOMORROW_BUTTON);
+        tomorrowButton.shouldBe(Condition.visible, Duration.ofSeconds(15)).click();
         return this;
     }
 
@@ -51,8 +53,8 @@ public class CalendarPopup extends BaseElement {
      */
     public CalendarPopup selectToday() {
         log.info("Выбор сегодняшней даты");
-        Selenide.sleep(500);
-        $x(TODAY_BUTTON).click();
+        SelenideElement todayButton = $x(TODAY_BUTTON);
+        todayButton.shouldBe(Condition.visible, Duration.ofSeconds(15)).click();
         return this;
     }
 }

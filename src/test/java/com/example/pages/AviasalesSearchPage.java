@@ -2,21 +2,20 @@ package com.example.pages;
 
 import static com.codeborne.selenide.Selenide.open;
 
+import java.time.Duration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Condition;
 import com.example.core.BasePage;
 import com.example.elements.Input;
 import com.example.elements.DataPicker;
 import com.example.elements.CalendarPopup;
-
-import com.example.elements.Passengers; // test 4
-import com.example.elements.Button; // test 4
-
-import com.example.elements.CurrencySelector; // test 6
-
-import com.example.elements.TripClass; // test 5
+import com.example.elements.Passengers;
+import com.example.elements.Button;
+import com.example.elements.CurrencySelector;
+import com.example.elements.TripClass;
 
 /**
  * Страница поиска Aviasales.
@@ -33,12 +32,12 @@ public class AviasalesSearchPage extends BasePage {
     private final DataPicker datePickerEndDate = DataPicker.byTestId("end-date-field");
     private CalendarPopup calendarPopup;
 
-    private final Passengers passengers = new Passengers(); // test 4
-    private final Button searchButton = Button.byTestId("form-submit"); // test 4
+    private final Passengers passengers = new Passengers();
+    private final Button searchButton = Button.byTestId("form-submit");
 
-    private final CurrencySelector currencySelector = new CurrencySelector(); // test 6
+    private final CurrencySelector currencySelector = new CurrencySelector();
 
-    private final TripClass tripClass = new TripClass(); // test 5
+    private final TripClass tripClass = new TripClass();
 
 
     public AviasalesSearchPage() {
@@ -51,11 +50,6 @@ public class AviasalesSearchPage extends BasePage {
     public static AviasalesSearchPage openPage() {
         log.info("Открытие страницы https://www.aviasales.ru");
         open("https://www.aviasales.ru");
-
-        Selenide.executeJavaScript(
-                "window.localStorage.clear(); window.sessionStorage.clear();"
-            );
-
         return new AviasalesSearchPage();
     }
 
@@ -169,8 +163,6 @@ public class AviasalesSearchPage extends BasePage {
     }
 
 
-    // for test 4
-
     /**
      * Открыть окно выбора пассажиров.
      */
@@ -210,13 +202,9 @@ public class AviasalesSearchPage extends BasePage {
      */
     public AviasalesSearchPage clickSearchButton() {
         log.info("Нажатие на кнопку 'Найти билеты'");
-        searchButton.click();
-        Selenide.sleep(2000);
+        searchButton.getBaseElement().shouldBe(Condition.visible, Duration.ofSeconds(10)).click();
         return this;
-    }  
-
-
-    // for test 6:
+    }
 
     /**
      * Сменить валюту на USD.
@@ -238,8 +226,6 @@ public class AviasalesSearchPage extends BasePage {
 
 
 
-    // test 5:
-    
     /**
      * Открыть окно выбора класса.
      */

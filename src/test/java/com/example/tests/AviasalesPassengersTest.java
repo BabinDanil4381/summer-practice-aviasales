@@ -15,30 +15,23 @@ public class AviasalesPassengersTest extends BaseTest {
     public void shouldChangePassengersCount() {
         log.info("--- Запуск теста: изменение количества пассажиров ---");
 
-        // 1) Открыть страницу
-        AviasalesSearchPage searchPage = AviasalesSearchPage.openPage();
+        AviasalesSearchPage searchPage = openPage(AviasalesSearchPage.class);
         searchPage = searchPage.waitFieldsVisible();
 
-        // 2) Открыть окно пассажиров и выбрать 2 взрослых
         searchPage = searchPage.openPassengers();
         searchPage = searchPage.setAdults(2);
         searchPage = searchPage.applyPassengers();
 
-        // 3) Заполнить поле "откуда" — Москва
         searchPage = searchPage.clickOriginField();
         searchPage = searchPage.enterOriginQuery("Москва");
 
-        // 4) Заполнить поле "куда" — Екатеринбург
         searchPage = searchPage.clickDestinationField();
         searchPage = searchPage.enterDestinationQuery("Екатеринбург");
 
-        // 5) Выбрать дату "завтра"
         searchPage = searchPage.clickDatePickerStartDate();
-        searchPage.waitFieldsVisible(); 
+        searchPage.waitFieldsVisible();
         searchPage = searchPage.selectTomorrowDate();
 
-
-        // 6) Проверить, что в параметрах отображается "2 пассажира"
         String passengersText = searchPage.getPassengersText();
         log.info("Текст с пассажирами: '{}'", passengersText);
         assertTrue(passengersText.contains("2"),
@@ -46,5 +39,4 @@ public class AviasalesPassengersTest extends BaseTest {
 
         log.info("--- Тест успешно пройден ---");
     }
-    // работает, проверено
 }

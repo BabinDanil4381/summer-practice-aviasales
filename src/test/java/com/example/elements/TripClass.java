@@ -24,34 +24,39 @@ public class TripClass extends BaseElement {
 
     public TripClass open() {
         log.info("Открытие окна выбора класса");
-        baseElement.shouldBe(Condition.visible, Duration.ofSeconds(5)).click();
-        Selenide.sleep(500);
+        clickElement(visibleElement(Duration.ofSeconds(WAIT_SECONDS)));
         return this;
     }
 
     public TripClass selectBusiness() {
         log.info("Выбор бизнес-класса");
-        
-        // кликаем через JavaScript (без проверки на visible)
         Selenide.executeJavaScript(
-            "var el = document.querySelector('input[data-test-id=\"trip-class-C\"]');" +
-            "if (el) { el.click(); }" +
-            "else { console.log('Элемент не найден'); }"
+                """
+                (function() {
+                    var labels = Array.from(document.querySelectorAll('label'));
+                    var label = labels.find(function(el) {
+                        if (!el || !el.isConnected) {
+                            return false;
+                        }
+                        var text = (el.textContent || '').trim().toLowerCase();
+                        return text.includes('бизнес') || text.includes('business');
+                    });
+                    if (label) {
+                        label.click();
+                        return true;
+                    }
+                    return false;
+                })();
+                """
         );
-        
-        Selenide.sleep(300);
         return this;
     }
 
     public TripClass apply() {
         log.info("Применение выбора класса");
-        Selenide.sleep(500);
-        Selenide.executeJavaScript(
-            "var btn = document.querySelector('button[data-test-id=\"passengers-ready-button\"]');" +
-            "if (btn) { btn.click(); }" +
-            "else { console.log('Кнопка не найдена'); }"
-        );
-        Selenide.sleep(500);
+        SelenideElement readyButton = Selenide.$x("//button[@data-test-id='passengers-ready-button']");
+        readyButton.shouldBe(Condition.visible, Duration.ofSeconds(WAIT_SECONDS));
+        Selenide.executeJavaScript("arguments[0].click();", readyButton);
         return this;
     }
 

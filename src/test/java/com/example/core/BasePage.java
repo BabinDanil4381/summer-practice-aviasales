@@ -47,7 +47,7 @@ public class BasePage {
     /**
      * Создать объект страницы по её классу.
      */
-    public <T extends BasePage> T page(Class<T> pageClass) {
+    protected <T extends BasePage> T page(Class<T> pageClass) {
         log.info("Переход на страницу: {}", pageClass.getSimpleName());
         try {
             return pageClass.getDeclaredConstructor().newInstance();

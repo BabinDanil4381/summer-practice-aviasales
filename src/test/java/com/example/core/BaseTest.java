@@ -21,6 +21,18 @@ public class BaseTest {
 
     protected static final Logger log = LoggerFactory.getLogger(BaseTest.class);
 
+    protected <T extends BasePage> T openPage(Class<T> pageClass) {
+        log.info("Открытие страницы: {}", pageClass.getSimpleName());
+        Selenide.open("https://www.aviasales.ru");
+        Selenide.executeJavaScript("window.localStorage.clear(); window.sessionStorage.clear();");
+
+        try {
+            return pageClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Не удалось создать страницу: " + pageClass.getSimpleName(), e);
+        }
+    }
+
     @BeforeEach
     public void before() {
         log.info("=== Настройка браузера ===");
