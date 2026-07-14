@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * Элемент страницы «Поле ввода» (Input).
  * Наследуется от BaseElement.
  */
 public class DataPicker extends BaseElement {
