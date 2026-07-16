@@ -71,7 +71,6 @@ public class AviasalesHotelTests extends BaseTest {
         );
     }
 
-
     @Test
     public void shouldOpenCheapestHotel() {
 
@@ -84,11 +83,14 @@ public class AviasalesHotelTests extends BaseTest {
         page.selectTomorrowDate();
         page.clickSearchHotels();
         page.sortByPriceAscending();
+        assertTrue(
+                page.isSortedByPriceAscending(),
+                "Отели должны быть отсортированы по возрастанию цены"
+        );
         page.openFirstHotel();
-
         assertTrue(
                 page.hotelPageOpened(),
-                "Должна открыться страница отеля"
+                "Должна открыться страница самого дешевого отеля"
         );
     }
 }

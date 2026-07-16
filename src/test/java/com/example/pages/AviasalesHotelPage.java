@@ -55,6 +55,9 @@ public class AviasalesHotelPage extends BasePage {
     private static final String FIRST_HOTEL_BUTTON_XPATH =
             "(//button[.//div[text()='Выбрать номер']])[1]";
 
+    private static final String FIRST_HOTEL_XPATH =
+        "(//button[.//div[text()='Выбрать номер']])[1]";
+
     private static final String PRICE_PER_NIGHT_XPATH =
             "//*[@data-test-id='text'][contains(., '₽') and contains(., 'за')]";
 
@@ -161,15 +164,14 @@ public class AviasalesHotelPage extends BasePage {
 
     private void selectSortOption(String optionXpath) {
         openSortDropdown();
-
         SelenideElement option = $x(optionXpath);
         option.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        executeJavaScript("arguments[0].click();", option);
-
+        log.info( "Выбираем сортировку: {}", option.getText());
+        option.click();
         $$x(PRICE_XPATH)
                 .filter(Condition.visible)
                 .first()
-                .shouldBe(Condition.visible, Duration.ofSeconds(10));
+                .shouldBe(Condition.visible,Duration.ofSeconds(30));
     }
 
     private void openSortDropdown() {
@@ -238,37 +240,58 @@ public class AviasalesHotelPage extends BasePage {
 
 
     public AviasalesHotelPage openFirstHotel() {
-        log.info("Открытие первого найденного отеля");
+        log.info("Открытие самого дешевого отеля");
 
-        SelenideElement firstHotelButton = $x(FIRST_HOTEL_BUTTON_XPATH);
-        firstHotelButton.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        firstHotelButton.scrollIntoView("{block:'center'}");
+        SelenideElement firstHotel = $x(FIRST_HOTEL_XPATH);
 
-        removeOverlappingElements(firstHotelButton);
+        firstHotel.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        firstHotel.scrollIntoView("{block:'center'}");
 
         String currentWindow = WebDriverRunner.getWebDriver().getWindowHandle();
         int windowsBefore = WebDriverRunner.getWebDriver().getWindowHandles().size();
 
-        firstHotelButton.click();
+        executeJavaScript("arguments[0].click();", firstHotel);
 
         Selenide.Wait()
-                .withTimeout(Duration.ofSeconds(10))
+                .withTimeout(Duration.ofSeconds(15))
                 .until(driver ->
                         driver.getWindowHandles().size() > windowsBefore
-                                || !driver.getCurrentUrl().contains("/hotels")
                 );
 
-        if (WebDriverRunner.getWebDriver().getWindowHandles().size() > windowsBefore) {
-            for (String handle : WebDriverRunner.getWebDriver().getWindowHandles()) {
-                if (!handle.equals(currentWindow)) {
-                    WebDriverRunner.getWebDriver().switchTo().window(handle);
-                    break;
-                }
+        for (String handle : WebDriverRunner.getWebDriver().getWindowHandles()) {
+            if (!handle.equals(currentWindow)) {
+                WebDriverRunner.getWebDriver()
+                    .switchTo()
+                    .window(handle);
+                break;
             }
         }
 
         return this;
     }
+
+    public boolean isSortedByPriceAscending() {
+        ElementsCollection prices =
+                $$x(PRICE_XPATH)
+                        .filter(Condition.visible);
+        prices.shouldBe(
+                CollectionCondition.sizeGreaterThan(1),
+                Duration.ofSeconds(15));
+        int firstPrice = Integer.parseInt(
+                prices.get(0)
+                        .getText()
+                        .replaceAll("[^0-9]", ""));
+        int secondPrice = Integer.parseInt(
+                prices.get(1)
+                        .getText()
+                        .replaceAll("[^0-9]", ""));
+        log.info(
+                "Проверка сортировки: {} <= {}",
+                firstPrice,
+                secondPrice);
+        return firstPrice <= secondPrice;
+    }
+
 
     private void removeOverlappingElements(SelenideElement target) {
         executeJavaScript(
@@ -289,7 +312,7 @@ public class AviasalesHotelPage extends BasePage {
     }
 
     public boolean hotelPageOpened() {
-        return !WebDriverRunner.url().contains("/hotels");
+        return WebDriverRunner.url().matches(".*/hotels/[^/?]+.*");
     }
 
     public boolean searchResultsOpened() {
