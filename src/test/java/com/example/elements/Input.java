@@ -1,107 +1,106 @@
 package com.example.elements;
 
+import java.time.Duration;
+
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.example.core.BaseElement;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Элемент страницы «Поле ввода» (Input).
- * Наследуется от BaseElement.
+ * Поле ввода.
  */
 public class Input extends BaseElement {
 
-    private static final Logger log = LoggerFactory.getLogger(Input.class);
+    private static final Logger log =
+            LoggerFactory.getLogger(Input.class);
 
-    private static final String ID_XPATH = "//input[@id='%s']";
-    private static final String NAME_XPATH = "//input[@name='%s']";
-    private static final String TEXTAREA_NAME_XPATH = "//textarea[@name='%s']";
+    private static final String ID_XPATH =
+            "//input[@id='%s']";
+
+    private static final String NAME_XPATH =
+            "//input[@name='%s']";
+
+    private static final String TEXTAREA_NAME_XPATH =
+            "//textarea[@name='%s']";
 
     private Input(String xpath, String param) {
         super(xpath, param);
     }
 
-    /**
-     * Создать поле ввода по атрибуту id.
-     */
     public static Input byId(String id) {
         log.info("Создание Input по id: {}", id);
         return new Input(ID_XPATH, id);
     }
 
-    /**
-     * Создать поле ввода по атрибуту name.
-     */
     public static Input byName(String name) {
         log.info("Создание Input по name: {}", name);
         return new Input(NAME_XPATH, name);
     }
 
-    /**
-     * Создать поле ввода (textarea) по атрибуту name.
-     */
     public static Input byTextareaName(String name) {
-        log.info("Создание Input (textarea) по name: {}", name);
+        log.info("Создание textarea по name: {}", name);
         return new Input(TEXTAREA_NAME_XPATH, name);
     }
 
-    /**
-     * Клик на поле ввода.
-     * Воспроизводит нажатие пользователя на элемент.
-     * При перехвате клика (например, выпадающим списком) используется JavaScript.
-     */
     public void click() {
-        log.info("Клик на поле ввода");
+        log.info("Клик по полю");
+
         try {
             baseElement.click();
         } catch (Exception e) {
-            log.warn("Обычный клик перехвачен, использую JavaScript клик");
-            Selenide.executeJavaScript("arguments[0].click();", baseElement);
+            log.warn("Обычный клик перехвачен, использую JavaScript");
+            Selenide.executeJavaScript(
+                    "arguments[0].click();",
+                    baseElement
+            );
         }
     }
 
-    /** КОСТЫЛЬ ИЗ ЗА РЕАКТА
-     * Установить значение через нативный сеттер + input-событие.
-     * Работает с React/Vue-контролируемыми полями.
+    /**
+     * Для React-контролируемых полей.
      */
     protected void setValueReact(String value) {
         Selenide.executeJavaScript(
-            "var el = arguments[0];" +
-            "var setter = Object.getOwnPropertyDescriptor(" +
-            "    window.HTMLInputElement.prototype, 'value').set;" +
-            "setter.call(el, arguments[1]);" +
-            "el.dispatchEvent(new Event('input', { bubbles: true }));",
-            baseElement, value
+                "var el = arguments[0];" +
+                        "var setter = Object.getOwnPropertyDescriptor(" +
+                        "window.HTMLInputElement.prototype,'value').set;" +
+                        "setter.call(el, arguments[1]);" +
+                        "el.dispatchEvent(new Event('input',{bubbles:true}));",
+                baseElement,
+                value
         );
     }
 
-    /**
-     * Ввести текст в поле.
-     */
     public void fill(String value) {
-        log.info("Ввод текста: '{}'", value);
-        Selenide.sleep(200);
-        setValueReact(value);
-        Selenide.sleep(300);
+        log.info("Ввод текста: {}", value);
 
-        var options = Selenide.$$x("//*[@role='option']");
-        if (!options.isEmpty()) {
-            var match = options.stream()
-                    .filter(o -> o.$x(".//*[@data-test-id='text']").getText().equalsIgnoreCase(value))
-                    .findFirst()
-                    .orElse(options.first());
-            match.click();
+        setValueReact(value);
+
+        ElementsCollection options = Selenide.$$x("//*[@role='option']");
+        if (options.isEmpty()) {
+            return;
         }
+
+        options.shouldBe(CollectionCondition.sizeGreaterThan(0), Duration.ofSeconds(10));
+
+        var match = options.stream()
+                .filter(option -> option.$x(".//*[@data-test-id='text']")
+                        .getText()
+                        .equalsIgnoreCase(value))
+                .findFirst()
+                .orElse(options.first());
+
+        match.shouldBe(Condition.visible, Duration.ofSeconds(10)).click();
     }
 
-    /**
-     * Получить текущее значение поля.
-     */
     public String getValue() {
         String value = baseElement.getValue();
-        log.info("Текущее значение поля: '{}'", value);
+        log.info("Текущее значение поля: {}", value);
         return value;
     }
 }
