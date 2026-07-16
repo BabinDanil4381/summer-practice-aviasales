@@ -67,7 +67,7 @@ public class AviasalesSearchPage extends BasePage {
      * Нажать на поле "когда".
      */
     public AviasalesSearchPage clickDatePickerStartDate() {
-        log.info("Нажатие на поле 'когда'");
+        log.info("Нажатие на поле 'Когда'");
         CalendarPopup datePickerPopup = datePickerStartDate.click();
         datePickerPopup.waitVisible();
         this.calendarPopup = datePickerPopup;
@@ -78,7 +78,7 @@ public class AviasalesSearchPage extends BasePage {
      * нажать на пооле "обратно"
      */
     public AviasalesSearchPage clickDatePickerEndDate() {
-        log.info("Нажатие на поле 'когда'");
+        log.info("Нажатие на поле 'Обратно'");
         CalendarPopup datePickerPopup = datePickerEndDate.click();
         datePickerPopup.waitVisible();
         this.calendarPopup = datePickerPopup;
