@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * Элемент страницы «Поле ввода» (Input).
  * Наследуется от BaseElement.
  */
 public class DataPicker extends BaseElement {
@@ -41,6 +40,16 @@ public class DataPicker extends BaseElement {
         SelenideElement picker = visibleElement(Duration.ofSeconds(WAIT_SECONDS));
         clickElement(picker);
         return new CalendarPopup();
+    }
+
+    /**
+     * Получить текст из поля ввода.
+     */
+    public String getDisplayedDate() {
+        log.info("Получение отображаемой даты из DataPicker");
+        String value = this.getBaseElement().$("div").$("div").getText();
+        log.info("Дата в поле: '{}'", value);
+        return value;
     }
 
 }

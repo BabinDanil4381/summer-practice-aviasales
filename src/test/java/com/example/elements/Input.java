@@ -2,6 +2,7 @@ package com.example.elements;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.$x;
 import com.codeborne.selenide.SelenideElement;
 import com.example.core.BaseElement;
 
@@ -95,5 +96,17 @@ public class Input extends BaseElement {
         String value = element().getValue();
         log.info("Текущее значение поля: '{}'", value);
         return value;
+    }
+
+    /**
+     * получить подсказку о том что пунк назначения не вставлен
+     */
+    public String getValidationMessage() {
+        String fullXpath = this.getXPath() + "/preceding-sibling::div[1]";
+        SelenideElement hintElement = $x(fullXpath);
+        String message = hintElement.getText();
+        log.info("Сообщение валидации: '{}'", message);
+        return message;
+        
     }
 }

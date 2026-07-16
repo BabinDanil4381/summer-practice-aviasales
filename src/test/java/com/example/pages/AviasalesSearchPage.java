@@ -67,7 +67,7 @@ public class AviasalesSearchPage extends BasePage {
      * Нажать на поле "когда".
      */
     public AviasalesSearchPage clickDatePickerStartDate() {
-        log.info("Нажатие на поле 'когда'");
+        log.info("Нажатие на поле 'Когда'");
         CalendarPopup datePickerPopup = datePickerStartDate.click();
         datePickerPopup.waitVisible();
         this.calendarPopup = datePickerPopup;
@@ -78,7 +78,7 @@ public class AviasalesSearchPage extends BasePage {
      * нажать на пооле "обратно"
      */
     public AviasalesSearchPage clickDatePickerEndDate() {
-        log.info("Нажатие на поле 'когда'");
+        log.info("Нажатие на поле 'Обратно'");
         CalendarPopup datePickerPopup = datePickerEndDate.click();
         datePickerPopup.waitVisible();
         this.calendarPopup = datePickerPopup;
@@ -149,17 +149,31 @@ public class AviasalesSearchPage extends BasePage {
     }
 
     /**
-     * Получить текущее значение поля "откуда".
+     * Получить текущее значение поля "Откуда".
      */
     public String getOriginQuery() {
         return originInput.getValue();
     }
 
     /**
-     * Получить текущее значение поля "откуда".
+     * Получить текущее значение поля "Куда".
      */
     public String getdestinationQuery() {
         return destinationInput.getValue();
+    }
+
+    /**
+     * Получить текущее значение поля "когда".
+     */
+    public String getStartDate() {
+        return datePickerStartDate.getDisplayedDate();
+    }
+
+    /**
+     * Получить текущее значение поля "обратно".
+     */
+    public String getEndDate() {
+        return datePickerEndDate.getDisplayedDate();
     }
 
 
@@ -258,6 +272,13 @@ public class AviasalesSearchPage extends BasePage {
      */
     public String getTripClassText() {
         return tripClass.getSelectedClassText();
+    }
+
+    /**
+     * Получить текст с подсказки что поле "Куда" не заполнено
+     */
+    public String getTextValidationMessageDestinationInput() {
+        return destinationInput.getValidationMessage();
     }
 
 
