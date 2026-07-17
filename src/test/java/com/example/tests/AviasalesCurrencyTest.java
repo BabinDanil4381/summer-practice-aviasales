@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Тест №6: Изменение валюты на Aviasales. (Захаренко)
+ * Тест №6: Изменение валюты на Aviasales.
  */
 public class AviasalesCurrencyTest extends BaseTest {
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Тест №4: Изменение количества пассажиров на Aviasales. (Захаренко)
+ * Тест №4: Изменение количества пассажиров на Aviasales. 
  */
 public class AviasalesPassengersTest extends BaseTest {
 
