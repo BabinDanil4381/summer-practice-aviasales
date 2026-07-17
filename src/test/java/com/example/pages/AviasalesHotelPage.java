@@ -161,17 +161,17 @@ public class AviasalesHotelPage extends BasePage {
     }
 
 
-
     private void selectSortOption(String optionXpath) {
         openSortDropdown();
+
         SelenideElement option = $x(optionXpath);
         option.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        log.info( "Выбираем сортировку: {}", option.getText());
-        option.click();
+        executeJavaScript("arguments[0].click();", option); // JS-клик — обходит перехват оверлеем
+
         $$x(PRICE_XPATH)
                 .filter(Condition.visible)
                 .first()
-                .shouldBe(Condition.visible,Duration.ofSeconds(30));
+                .shouldBe(Condition.visible, Duration.ofSeconds(10));
     }
 
     private void openSortDropdown() {
